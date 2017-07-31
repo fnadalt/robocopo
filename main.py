@@ -1,5 +1,7 @@
 import cherrypy
 import jinja2
+#
+import core.db
 
 class RoboCopo(object):
 
@@ -22,12 +24,14 @@ class RoboCopo(object):
         cherrypy.session["_id_usuario"]=0
 
 if __name__=='__main__':
-    cherrypy.log("iniciando...")
     #
+    if not core.db.crear():
+        raise Exception("error fatal al intentar iniciar base de datos")
+    #
+    cherrypy.log("iniciando...")
     cherrypy.config.update({"server.socket_port": 8080, 
                                              "tools.sessions.on":True
                                             })
-    cherrypy.tree.mount(RoboCopo(), '/')
-    cherrypy.engine.start()
-    cherrypy.engine.block()
+    cherrypy.quickstart(RoboCopo(), '/')
     cherrypy.log("terminado")
+    #

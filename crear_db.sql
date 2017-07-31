@@ -1,33 +1,31 @@
-CREATE TABLE IF NOT EXISTS datos_filiatorios
-    (
-    _id_datos_filiatorios INTEGER PRIMARY KEY,
-    apellidos VARCHAR(32) NOT NULL,
-    nombres VARCHAR(32) NOT NULL,
-    dni VARCHAR(8), /* formato: 12345678 */
-    fecha_nac VARCHAR(8), /* formato: AAAAMMDD */
-    );
-CREATE INDEX IF NOT EXISTS idxDatosFiliatoriosApellidos ON datos_filiatorios(apellidos);
-CREATE INDEX IF NOT EXISTS idxDatosFiliatoriosDni ON datos_filiatorios(dni);
-
 CREATE TABLE IF NOT EXISTS usuarios
     (
     _id_usuario INTEGER PRIMARY KEY,
-    _id_datos_filiatorios INTEGER NOT NULL ,
+    apellidos VARCHAR(32) NOT NULL,
+    nombres VARCHAR(32) NOT NULL,
+    dni VARCHAR(8), /* formato: 12345678 */
     login VARCHAR(16) NOT NULL,
     contrasena VARCHAR(64) NOT NULL,
-    privilegios INTEGER NOT NULL DEFAULT 2 /* 0=administrador, 1=secretario, 2=alumno */
+    privilegios INTEGER NOT NULL DEFAULT 2 /* 0=administrador, 1=secretario, 2=padre */
     );
-CREATE INDEX IF NOT EXISTS idxUsuarioLogin ON usuarios (login);
+CREATE INDEX IF NOT EXISTS idxUsuariosLogin ON usuarios (login);
+CREATE INDEX IF NOT EXISTS idxUsuariosApellidos ON usuarios(apellidos);
+CREATE INDEX IF NOT EXISTS idxUsuariosDni ON usuarios(dni);
 
 CREATE TABLE IF NOT EXISTS alumnos
     (
     _id_alumno INTEGER PRIMARY KEY,
-    _id_datos_filiatorios INTEGER NOT NULL,
+    apellidos VARCHAR(32) NOT NULL,
+    nombres VARCHAR(32) NOT NULL,
+    dni VARCHAR(8), /* formato: 12345678 */
+    fecha_nac VARCHAR(8), /* formato: AAAAMMDD */
     n_legajo VARCHAR(8), /* formato: ? */
     curso VARCHAR(8) NOT NULL, /* formato: ? */
     turno INTEGER NOT NULL DEFAULT 0, /* formato: 0=mañana, 1=tarde */
     modalidad INTEGER NOT NULL DEFAULT 0 /* formato: 0=presencial, 1=semi */
     );
+CREATE INDEX IF NOT EXISTS idxAlumnosApellidos ON alumnos(apellidos);
+CREATE INDEX IF NOT EXISTS idxAlumnosDni ON alumnos(dni);
 
 CREATE TABLE IF NOT EXISTS materias
     (
